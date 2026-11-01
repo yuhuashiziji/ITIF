@@ -1,0 +1,31 @@
+name: Checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m unittest discover -s tests
+      - name: JavaScript syntax
+        run: |
+          for file in server/*.js; do node --check "$file"; done
+      - run: node tests/test_frontend.js
+      - name: Validate PHP bundle
+        run: |
+          python tools/package_php.py --output dist
+          python -m zipfile -e dist/itif-php85.zip dist/site
+          for file in dist/site/*.php; do php -l "$file"; done
+          for file in dist/site/*.js; do node --check "$file"; done
+      - name: Validate release allowlist
+        run: python tools/package_release.py --output dist

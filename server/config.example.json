@@ -1,0 +1,101 @@
+{
+  "market_interval": 300,
+  "rss_interval": 900,
+  "stocks": [
+    "sh600519",
+    "sz300750",
+    "sh688981"
+  ],
+  "us_stocks": [
+    "NVDA",
+    "AAPL",
+    "TSLA",
+    "MSFT"
+  ],
+  "coins": [
+    "bitcoin",
+    "ethereum",
+    "solana",
+    "binancecoin"
+  ],
+  "feeds": [
+    {
+      "name": "少数派",
+      "url": "https://sspai.com/feed"
+    },
+    {
+      "name": "阮一峰的网络日志",
+      "url": "https://www.ruanyifeng.com/blog/atom.xml"
+    },
+    {
+      "name": "CNBC Finance",
+      "url": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
+      "category": "finance"
+    },
+    {
+      "name": "Federal Reserve",
+      "url": "https://www.federalreserve.gov/feeds/press_all.xml",
+      "category": "finance"
+    },
+    {
+      "name": "Cointelegraph",
+      "url": "https://cointelegraph.com/rss",
+      "category": "finance"
+    },
+    {
+      "name": "Stack Overflow Blog",
+      "url": "https://stackoverflow.blog/feed/",
+      "category": "dev"
+    },
+    {
+      "name": "DEV Community",
+      "url": "https://dev.to/feed",
+      "category": "dev"
+    },
+    {
+      "name": "Cloudflare Blog",
+      "url": "https://blog.cloudflare.com/rss/",
+      "category": "dev"
+    },
+    {
+      "name": "Rust Blog",
+      "url": "https://blog.rust-lang.org/feed.xml",
+      "category": "dev"
+    },
+    {
+      "name": "Mozilla Hacks",
+      "url": "https://hacks.mozilla.org/feed/",
+      "category": "dev"
+    },
+    {
+      "name": "InfoQ",
+      "url": "https://feed.infoq.com/",
+      "category": "dev"
+    },
+    {
+      "name": "TechCrunch",
+      "url": "https://techcrunch.com/feed/",
+      "category": "tech"
+    },
+    {
+      "name": "The Verge",
+      "url": "https://www.theverge.com/rss/index.xml",
+      "category": "tech"
+    },
+    {
+      "name": "Ars Technica",
+      "url": "https://feeds.arstechnica.com/arstechnica/index",
+      "category": "tech"
+    },
+    {
+      "name": "NPR World",
+      "url": "https://feeds.npr.org/1004/rss.xml",
+      "category": "news"
+    },
+    {
+      "name": "MIT News AI",
+      "url": "https://news.mit.edu/rss/topic/artificial-intelligence2",
+      "category": "ai"
+    }
+  ]
+}

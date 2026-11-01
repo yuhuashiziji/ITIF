@@ -1,0 +1,34 @@
+name: Refresh public feeds
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17,47 * * * *'
+permissions:
+  contents: read
+concurrency:
+  group: public-feed-update
+  cancel-in-progress: false
+jobs:
+  refresh:
+    if: github.event.repository.fork == false || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tools/build_public_snapshot.py
+      - name: Commit public snapshot only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- public-data/snapshot.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'data: refresh public feeds and quotes'
+            git push
+          fi

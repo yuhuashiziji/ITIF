@@ -1,0 +1,37 @@
+# Private runtime state
+server/data/
+server/config.json
+server/config.tmp
+.env
+.env.*
+!.env.example
+*.log
+*.tmp
+*.py[cod]
+__pycache__/
+.venv/
+venv/
+# Development artifacts and fetched content
+_backup/
+_shots/
+_tmp_cat/
+.taste-skill/
+spider/data/
+spider/pages/
+spider/_*.txt
+dist/
+*.zip
+.DS_Store
+Thumbs.db
+
+# Legacy prototypes and local development helpers
+spider/
+方案*.html
+brief.md
+实装说明.md
+eval-workbench.js
+assets/
+
+# Shared hosting runtime
+hosting/php/runtime/
+hosting/php/config.php
