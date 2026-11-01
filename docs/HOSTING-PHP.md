@@ -14,7 +14,7 @@
 
 ## GitHub 自动更新
 
-仓库：<https://github.com/yuhuashiziji/ITIF>。在 Actions 中选择 **Refresh public feeds → Run workflow** 执行首次抓取。默认 UTC 每小时 17、47 分尝试更新；北京时间同样为每小时 17、47 分。
+仓库：<https://github.com/yuhuashiziji/ITIF>。来源配置或工作流变更提交后会自动抓取；也可在 Actions 中选择 **Refresh public feeds → Run workflow** 手动执行。默认 UTC 每小时 17、47 分尝试更新；北京时间同样为每小时 17、47 分。
 
 工作流只读取 `server/sources.json` 与 `server/config.example.json`，写入 `public-data/snapshot.json`。不会读取本机配置、私人订阅、阅读记录或本地缓存。来源刷新间隔与失败退避仍然生效。公开仓库标准 GitHub 托管运行器通常免计费，配额与服务规则以 GitHub 当时政策为准。
 

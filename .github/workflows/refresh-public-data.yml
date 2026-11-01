@@ -1,6 +1,13 @@
 name: Refresh public feeds
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - server/sources.json
+      - server/config.example.json
+      - tools/build_public_snapshot.py
+      - .github/workflows/refresh-public-data.yml
   schedule:
     - cron: '17,47 * * * *'
 permissions:

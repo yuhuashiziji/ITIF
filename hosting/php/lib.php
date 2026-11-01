@@ -84,7 +84,7 @@ function translate_itif(): never {
     if(!$lock || !flock($lock,LOCK_EX|LOCK_NB))respond(['error'=>'Translation busy'],429);
     try{
         $store=read_guard($dir.'/translations.php')??[];$day=gmdate('Y-m-d');if(($store['day']??'')!==$day)$store=['day'=>$day,'used'=>0,'cache'=>[]];
-        $results=[];$c=config_itif();
+        $results=[];$c=config_itif();$deadline=microtime(true)+8;
         foreach($texts as $text){
             $key=hash('sha256',$target."\0".$text);
             if(isset($store['cache'][$key])){$results[]=['text'=>$store['cache'][$key],'error'=>''];continue;}
@@ -93,7 +93,7 @@ function translate_itif(): never {
             $store['used']+=$count;write_guard($dir.'/translations.php',$store);$chunks=[];$chunk='';
             foreach($chars[0] as $char){if(strlen($chunk.$char)>450){$chunks[]=$chunk;$chunk='';}$chunk.=$char;}if($chunk!=='')$chunks[]=$chunk;
             try{
-                $translated='';$deadline=microtime(true)+8;
+                $translated='';
                 foreach($chunks as $part){if(microtime(true)>$deadline)throw new RuntimeException('Timeout');$lang=$target==='en'?'zh-CN|en':'en|zh-CN';$data=json_decode(remote_itif('https://api.mymemory.translated.net/get?'.http_build_query(['q'=>$part,'langpair'=>$lang]),100000,3),true);if(($data['responseStatus']??0)!==200||!is_string($data['responseData']['translatedText']??null))throw new RuntimeException('Translation unavailable');$translated.=html_entity_decode($data['responseData']['translatedText'],ENT_QUOTES|ENT_HTML5,'UTF-8');}
                 $store['cache'][$key]=$translated;$results[]=['text'=>$translated,'error'=>''];
             }catch(Throwable $e){$results[]=['text'=>$text,'error'=>'免费翻译暂不可用，保留原文'];}
