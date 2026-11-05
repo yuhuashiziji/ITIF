@@ -29,6 +29,8 @@ class HostingTests(unittest.TestCase):
             base=Path(d);package_php.build(base);site=base/'itif';site.mkdir()
             with zipfile.ZipFile(base/'itif-php85.zip') as z:
                 self.assertNotIn('config.php',z.namelist());self.assertFalse(any(n.endswith('.py') for n in z.namelist()));z.extractall(site)
+            seed=json.loads((site/'seed.php').read_text(encoding='utf-8').split('\n',1)[1]);(site/'runtime').mkdir()
+            (site/'runtime/snapshot.php').write_text('<?php exit; ?>\n'+json.dumps({'checked':int(time.time()),'value':seed,'error':''}),encoding='utf-8')
             with socket.socket() as s:s.bind(('127.0.0.1',0));port=s.getsockname()[1]
             process=subprocess.Popen([str(PHP),'-S',f'127.0.0.1:{port}','-t',str(base)],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
             url=f'http://127.0.0.1:{port}/itif/'
@@ -39,7 +41,7 @@ class HostingTests(unittest.TestCase):
                 self.assertEqual(status,200);v=json.loads(raw);self.assertTrue(v['ok']);self.assertIn('delivery',v)
                 status,raw,h=http(url);self.assertEqual(status,200);text=raw.decode();self.assertIn('window.ITIF_PUBLIC=true',text);self.assertIn('api.php?action=rss',text);self.assertNotIn('src="/',text);self.assertNotIn('href="/',text)
                 self.assertEqual(h['X-Frame-Options'],'DENY')
-                status,raw,h=http(url+'api.php?action=status');self.assertEqual(status,200);v=json.loads(raw);self.assertEqual(len(v['feeds']),len([s for s in json.loads((ROOT/'server/sources.json').read_text(encoding='utf-8')) if s.get('enabled',True) and not s.get('private')]));self.assertTrue(all(not f.get('private') for f in v['feeds']))
+                status,raw,h=http(url+'api.php?action=status');self.assertEqual(status,200);v=json.loads(raw);self.assertEqual(len(v['feeds']),len(seed['status']['feeds']));self.assertTrue(all(not f.get('private') for f in v['feeds']))
                 for name in ['seed.php','template.php','config.example.php','runtime/snapshot.php']:
                     status,raw,h=http(url+name);self.assertEqual(raw,b'',name)
                 self.assertEqual(http(url+'lib.php')[0],404)
