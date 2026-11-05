@@ -1,1 +1,2 @@
-# Python 3.10+ standard library only. No pip dependencies required.
+# Optional public-web extraction (Python 3.10+); RSS/API adapters keep their existing transport.
+scrapling==0.5.1

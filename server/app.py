@@ -1,6 +1,7 @@
 """Local RSS and market-data service. Python 3.10+, standard library only."""
 import rss_engine
 import editorial
+import web_sources
 import domestic
 import market_adapters
 import translation
@@ -63,6 +64,8 @@ def market(kind):
     save()
 def feed(source):
     url=source['url']
+    if source.get('kind')=='web':
+        return {**source,'source_id':source['id'],'items':web_sources.fetch(source,request),'fetched_at':now(),'checked_at':now(),'error':'','failures':0}
     if source.get('kind')=='hot':
         if source.get('snapshot'):raise ValueError('暂无稳定公开榜单，保留明确标注的历史快照')
         return {**source,'source_id':source['id'],'items':domestic.fetch(source,request),'fetched_at':now(),'checked_at':now(),'error':'','failures':0}

@@ -23,7 +23,7 @@ def build(output):
     archive=output/'itif-source.zip'
     with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
         for row in manifest:z.write(ROOT/row['path'],'itif/'+row['path'])
-        z.writestr('itif/MANIFEST.json',json.dumps({'project':'ITIF 信息台','version':'0.2.0','files':manifest},ensure_ascii=False,indent=2))
+        z.writestr('itif/MANIFEST.json',json.dumps({'project':'ITIF 信息台','version':'0.3.0','files':manifest},ensure_ascii=False,indent=2))
     checksum=hashlib.sha256(archive.read_bytes()).hexdigest()
     (output/'itif-source.sha256').write_text(checksum+'  itif-source.zip\n',encoding='utf-8')
     print(f'Built {archive.name}: {len(files)} source files, {archive.stat().st_size} bytes')

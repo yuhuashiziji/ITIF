@@ -409,5 +409,78 @@
     "enabled": true,
     "kind": "rss",
     "attribution": "保留来源和原文链接，内容版权归原作者"
+  },
+  {
+    "id": "7af63dab3fc0",
+    "name": "央视新闻",
+    "url": "https://news.cctv.com/",
+    "category": "news",
+    "language": "zh",
+    "weight": 125,
+    "interval": 1800,
+    "enabled": true,
+    "kind": "web",
+    "adapter": "scrapling",
+    "domains": [
+      "cctv.com"
+    ],
+    "article_pattern": "/20\\d{2}/\\d{2}/\\d{2}/[^/]+\\.shtml",
+    "min_items": 3,
+    "attribution": "公开首页精选，非平台热榜；仅标题与原文链接；发布时间未知时以发现时间标注"
+  },
+  {
+    "id": "413416ff2123",
+    "name": "界面新闻",
+    "url": "https://www.jiemian.com/",
+    "category": "finance",
+    "language": "zh",
+    "weight": 125,
+    "interval": 1800,
+    "enabled": true,
+    "kind": "web",
+    "adapter": "scrapling",
+    "domains": [
+      "jiemian.com"
+    ],
+    "article_pattern": "^/article/\\d+\\.html",
+    "min_items": 3,
+    "attribution": "公开首页精选，非平台热榜；仅标题与原文链接；发布时间未知时以发现时间标注"
+  },
+  {
+    "id": "ddaa244db41a",
+    "name": "新华网",
+    "url": "https://www.news.cn/",
+    "category": "news",
+    "language": "zh",
+    "weight": 125,
+    "interval": 1800,
+    "enabled": true,
+    "kind": "web",
+    "adapter": "scrapling",
+    "domains": [
+      "news.cn",
+      "xinhuanet.com"
+    ],
+    "article_pattern": "/20\\d{6}/[^/]+/c\\.html",
+    "min_items": 3,
+    "attribution": "公开首页精选，非平台热榜；仅标题与原文链接；发布时间未知时以发现时间标注"
+  },
+  {
+    "id": "06cf495f547d",
+    "name": "第一财经",
+    "url": "https://www.yicai.com/",
+    "category": "finance",
+    "language": "zh",
+    "weight": 125,
+    "interval": 1800,
+    "enabled": true,
+    "kind": "web",
+    "adapter": "scrapling",
+    "domains": [
+      "yicai.com"
+    ],
+    "article_pattern": "^/news/\\d+\\.html",
+    "min_items": 3,
+    "attribution": "公开首页精选，非平台热榜；仅标题与原文链接；发布时间未知时以发现时间标注"
   }
 ]

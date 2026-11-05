@@ -22,6 +22,6 @@ def fetch(source,request):
 def board_nodes(feeds):
     nodes=[]
     for f in feeds:
-        hot=f.get('kind')=='hot';name=f['name'];status='历史快照' if f.get('snapshot') else '缓存 · 更新失败' if f.get('error') else '热榜' if hot else 'RSS'
+        hot=f.get('kind')=='hot';name=f['name'];status='历史快照' if f.get('snapshot') else '缓存 · 更新失败' if f.get('error') else '热榜' if hot else '网页精选' if f.get('kind')=='web' else 'RSS'
         nodes.append({'id':('hot-' if hot else 'rss-')+f.get('source_id',str(len(nodes))),'name':name,'cat':f.get('category','news'),'language':f.get('language','zh' if hot else 'en'),'weight':f.get('weight',80),'board':status+' · '+('时间未知' if f.get('snapshot') else f.get('fetched_at') or '等待抓取'),'all':True,'private':bool(f.get('private')),'snapshot':f.get('snapshot',False),'error':f.get('error',''),'priority':PRIORITY.index(name) if name in PRIORITY else 99,'color':'#dc2626' if hot else '#1e40af','items':[[r['title'],r.get('heat',''),'',r['url']] for r in f.get('items',[]) if r.get('url','').startswith(('http://','https://'))]})
     return nodes

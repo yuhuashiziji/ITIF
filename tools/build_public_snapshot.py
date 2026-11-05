@@ -5,6 +5,7 @@ from urllib.parse import urlsplit
 import urllib.request
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'server'))
+import web_sources
 import domestic, editorial, market_adapters, public_http, rss_engine
 def now():return dt.datetime.now(dt.timezone.utc).isoformat()
 def public_url(url):
@@ -29,7 +30,7 @@ def valid_link(url):
         return p.scheme in ('http','https') and bool(p.hostname) and not p.username and not p.password
     except ValueError:return False
 def public_items(items):
-    return [{k:str(a.get(k,''))[:(2000 if k=='url' else 300)] for k in ('title','url','heat','published')} for a in items[:40] if valid_link(a.get('url','')) and a.get('title')]
+    return [{**{k:str(a.get(k,''))[:300] for k in ('title','heat','published')},'url':a['url']} for a in items[:40] if valid_link(a.get('url','')) and len(a['url'])<=2000 and a.get('title')]
 def fetch_feed(s,old):
     result={k:s[k] for k in ('id','name','url','category','language','weight','kind','snapshot') if k in s}
     result.update(source_id=s['id'],private=False,checked_at=now(),next_check_at=(dt.datetime.now(dt.timezone.utc)+dt.timedelta(seconds=max(1800,s.get('interval',1800)))).isoformat())
@@ -40,7 +41,7 @@ def fetch_feed(s,old):
     if due>dt.datetime.now().timestamp():
         return {**result,**{k:old[k] for k in ('items','fetched_at','checked_at','next_check_at','error','failures') if k in old},'items':public_items(old.get('items',[]))}
     try:
-        items=domestic.fetch(s,request) if s.get('kind')=='hot' else rss_engine.parse(request(s['url']),s['url'])
+        items=web_sources.fetch(s,request) if s.get('kind')=='web' else domestic.fetch(s,request) if s.get('kind')=='hot' else rss_engine.parse(request(s['url']),s['url'])
         if not items:raise ValueError('No articles')
         result.update(items=public_items(items),fetched_at=now(),error='',failures=0)
     except Exception:

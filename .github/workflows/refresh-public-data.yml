@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
     paths:
+      - requirements.txt
+      - server/web_sources.py
       - server/sources.json
       - server/config.example.json
       - tools/build_public_snapshot.py
@@ -29,6 +31,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - run: python -m pip install -r requirements.txt
       - run: python tools/build_public_snapshot.py
       - name: Commit public snapshot only
         run: |

@@ -14,7 +14,7 @@ class HostingTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             p=Path(d)/'snapshot.json';p.write_text(json.dumps({'status':{'feeds':[{'source_id':'secret','private':True,'items':[{'title':'PRIVATE_SENTINEL','url':'http://example.org'}]}]}}))
             exporter.build(p,offline=True);v=json.loads(p.read_text(encoding='utf-8'))
-            self.assertNotIn('PRIVATE_SENTINEL',p.read_text(encoding='utf-8'));self.assertEqual(len(v['status']['feeds']),31)
+            self.assertNotIn('PRIVATE_SENTINEL',p.read_text(encoding='utf-8'));self.assertEqual(len(v['status']['feeds']),len([s for s in json.loads((ROOT/'server/sources.json').read_text(encoding='utf-8')) if s.get('enabled',True) and not s.get('private')]))
             self.assertTrue(all(not f.get('private') and not f['items'] for f in v['status']['feeds']))
             self.assertTrue(v['editorial']['read_only'])
     def test_failure_keeps_original_time_and_public_links(self):
@@ -39,7 +39,7 @@ class HostingTests(unittest.TestCase):
                 self.assertEqual(status,200);v=json.loads(raw);self.assertTrue(v['ok']);self.assertIn('delivery',v)
                 status,raw,h=http(url);self.assertEqual(status,200);text=raw.decode();self.assertIn('window.ITIF_PUBLIC=true',text);self.assertIn('api.php?action=rss',text);self.assertNotIn('src="/',text);self.assertNotIn('href="/',text)
                 self.assertEqual(h['X-Frame-Options'],'DENY')
-                status,raw,h=http(url+'api.php?action=status');self.assertEqual(status,200);v=json.loads(raw);self.assertEqual(len(v['feeds']),31);self.assertTrue(all(not f.get('private') for f in v['feeds']))
+                status,raw,h=http(url+'api.php?action=status');self.assertEqual(status,200);v=json.loads(raw);self.assertEqual(len(v['feeds']),len([s for s in json.loads((ROOT/'server/sources.json').read_text(encoding='utf-8')) if s.get('enabled',True) and not s.get('private')]));self.assertTrue(all(not f.get('private') for f in v['feeds']))
                 for name in ['seed.php','template.php','config.example.php','runtime/snapshot.php']:
                     status,raw,h=http(url+name);self.assertEqual(raw,b'',name)
                 self.assertEqual(http(url+'lib.php')[0],404)
